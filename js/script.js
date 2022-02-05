@@ -224,6 +224,37 @@ function makeInputForm() {
 }
 
 
+// 計算ボタン押下時の挙動
+function calcAndShow(num, mode) {
+    document.getElementById("warning").textContent = "";
+
+    if(mode !== "manual") {
+        changeComp(num, mode);
+        changeOne(num, mode);
+    } else {
+        const ssrRate = parseFloat(document.querySelector("#ssr td:nth-child(3) input").value) || 0;
+        const srRate = parseFloat(document.querySelector("#sr td:nth-child(3) input").value) || 0;
+        const aRate = parseFloat(document.querySelector("#a td:nth-child(3) input").value) || 0;
+        const bRate = parseFloat(document.querySelector("#b td:nth-child(3) input").value) || 0;
+        const cRate = parseFloat(document.querySelector("#c td:nth-child(3) input").value) || 0;
+        const dRate = parseFloat(document.querySelector("#d td:nth-child(3) input").value) || 0;
+        const eRate = parseFloat(document.querySelector("#e td:nth-child(3) input").value) || 0;
+
+        const sum = ssrRate + srRate + aRate + bRate + cRate + dRate + eRate;
+        if(sum < 99 || 101 < sum) {
+            document.getElementById("warning").textContent = `確率の合計は100%になるようにしてください（現在：${sum}%）`;
+        }
+
+        calcShowComp(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
+        calcShowOne(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
+    }
+}
+
+
+
+
+
+
 window.onload = function() {
     const button = document.getElementById("exec");
     const probSelect = document.getElementById("prob_select");
@@ -244,31 +275,7 @@ window.onload = function() {
     button.addEventListener('click', () => {
         const num = document.getElementById("num").value;
         const mode = probSelect.value;
-
-        document.getElementById("warning").textContent = "";
-
-        if(mode !== "manual") {
-            changeComp(num, mode);
-            changeOne(num, mode);
-        } else {
-            const ssrRate = parseFloat(document.querySelector("#ssr td:nth-child(3) input").value) || 0;
-            const srRate = parseFloat(document.querySelector("#sr td:nth-child(3) input").value) || 0;
-            const aRate = parseFloat(document.querySelector("#a td:nth-child(3) input").value) || 0;
-            const bRate = parseFloat(document.querySelector("#b td:nth-child(3) input").value) || 0;
-            const cRate = parseFloat(document.querySelector("#c td:nth-child(3) input").value) || 0;
-            const dRate = parseFloat(document.querySelector("#d td:nth-child(3) input").value) || 0;
-            const eRate = parseFloat(document.querySelector("#e td:nth-child(3) input").value) || 0;
-
-            const sum = ssrRate + srRate + aRate + bRate + cRate + dRate + eRate;
-            if(sum < 99 || 101 < sum) {
-                document.getElementById("warning").textContent = `確率の合計は100%になるようにしてください（現在：${sum}%）`;
-            }
-
-            calcShowComp(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
-            calcShowOne(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
-        }
-
-
+        calcAndShow(num, mode);
     });
 
     // 提供割合のモード切り替え時
@@ -298,6 +305,28 @@ window.onload = function() {
             document.querySelector("#e td:nth-child(3) span").appendChild(makeInputForm());
         }
         changeDistribution(mode);
+
+        // 数値の更新
+        const num = document.getElementById("num").value;
+        if (num !== "" && mode !== "manual") {
+            calcAndShow(num, mode);
+        }
+        if (mode === "manual") {
+            document.querySelector("#ssr td:nth-child(4)").textContent = "";
+            document.querySelector("#sr td:nth-child(4)").textContent = "";
+            document.querySelector("#a td:nth-child(4)").textContent = "";
+            document.querySelector("#b td:nth-child(4)").textContent = "";
+            document.querySelector("#c td:nth-child(4)").textContent = "";
+            document.querySelector("#d td:nth-child(4)").textContent = "";
+            document.querySelector("#e td:nth-child(4)").textContent = "";
+            document.querySelector("#ssr td:nth-child(5)").textContent = "";
+            document.querySelector("#sr td:nth-child(5)").textContent = "";
+            document.querySelector("#a td:nth-child(5)").textContent = "";
+            document.querySelector("#b td:nth-child(5)").textContent = "";
+            document.querySelector("#c td:nth-child(5)").textContent = "";
+            document.querySelector("#d td:nth-child(5)").textContent = "";
+            document.querySelector("#e td:nth-child(5)").textContent = "";
+        }
     });
 
 
