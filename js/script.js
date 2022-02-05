@@ -94,6 +94,9 @@ function getOneProb(n, p) {
 function deci2perc(num) {
     return (num * 100).toFixed(1) + "%";
 }
+function deci2percWithOutParcent(num) {
+    return (num * 100).toFixed(1);
+}
 
 
 const SSR_KIND = 1;
@@ -103,49 +106,201 @@ const B_KIND = 3;
 const C_KIND = 5;
 const D_KIND = 8;
 const E_KIND = 10;
-const SSR_PROB = 0.002;
-const SR_PROB = 0.006;
-const A_PROB = 0.012;
-const B_PROB = 0.08;
-const C_PROB = 0.15;
-const D_PROB = 0.2;
-const E_PROB = 0.55;
+
+const SSR_NORM_PROB = 0.002;
+const SR_NORM_PROB = 0.006;
+const A_NORM_PROB = 0.012;
+const B_NORM_PROB = 0.08;
+const C_NORM_PROB = 0.15;
+const D_NORM_PROB = 0.2;
+const E_NORM_PROB = 0.55;
+
+const SSR_POS_PROB = 0.004;
+const SR_POS_PROB = 0.008;
+const A_POS_PROB = 0.015;
+const B_POS_PROB = 0.08;
+const C_POS_PROB = 0.15;
+const D_POS_PROB = 0.2;
+const E_POS_PROB = 0.543;
+
+const SSR_NEG_PROB = 0.001;
+const SR_NEG_PROB = 0.004;
+const A_NEG_PROB = 0.010;
+const B_NEG_PROB = 0.08;
+const C_NEG_PROB = 0.15;
+const D_NEG_PROB = 0.2;
+const E_NEG_PROB = 0.555;
+
+
+let sampleSize = 1;
+let ssrStatProb = 0;
+let srStatProb = 0;
+let aStatProb = 0;
+let bStatProb = 0;
+let cStatProb = 0;
+let dStatProb = 0;
+let eStatProb = 1.00;
+
+// 統計値の計算
+function calcStat() {
+    // ここを手動で更新する
+    const SSR_NUM = 0;
+    const SR_NUM = 0;
+    const A_NUM = 0;
+    const B_NUM = 0;
+    const C_NUM = 0;
+    const D_NUM = 0;
+    const E_NUM = 1;
+
+    sampleSize = SSR_NUM + SR_NUM + A_NUM + B_NUM + C_NUM + D_NUM + E_NUM;
+    ssrStatProb = SSR_NUM / sampleSize;
+    srStatProb = SR_NUM / sampleSize;
+    aStatProb = A_NUM / sampleSize;
+    bStatProb = B_NUM / sampleSize;
+    cStatProb = C_NUM / sampleSize;
+    dStatProb = D_NUM / sampleSize;
+    eStatProb = E_NUM / sampleSize;
+}
+
+
+// 提供率の表示
+function showdistribution(ssrProb, srProb, aProb, bProb, cProb, dProb, eProb) {
+    document.querySelector("#ssr td:nth-child(3) span").textContent = deci2percWithOutParcent(ssrProb);
+    document.querySelector("#sr td:nth-child(3) span").textContent = deci2percWithOutParcent(srProb);
+    document.querySelector("#a td:nth-child(3) span").textContent = deci2percWithOutParcent(aProb);
+    document.querySelector("#b td:nth-child(3) span").textContent = deci2percWithOutParcent(bProb);
+    document.querySelector("#c td:nth-child(3) span").textContent = deci2percWithOutParcent(cProb);
+    document.querySelector("#d td:nth-child(3) span").textContent = deci2percWithOutParcent(dProb);
+    document.querySelector("#e td:nth-child(3) span").textContent = deci2percWithOutParcent(eProb);
+}
+function changeDistribution(mode) {
+    if (mode === "normal") showdistribution(SSR_NORM_PROB, SR_NORM_PROB, A_NORM_PROB, B_NORM_PROB, C_NORM_PROB, D_NORM_PROB, E_NORM_PROB);
+    if (mode === "positive")  showdistribution(SSR_POS_PROB, SR_POS_PROB, A_POS_PROB, B_POS_PROB, C_POS_PROB, D_POS_PROB, E_POS_PROB);
+    if (mode === "negative")  showdistribution(SSR_NEG_PROB, SR_NEG_PROB, A_NEG_PROB, B_NEG_PROB, C_NEG_PROB, D_NEG_PROB, E_NEG_PROB);
+    if (mode === "static") showdistribution(ssrStatProb, srStatProb, aStatProb, bStatProb, cStatProb, dStatProb, eStatProb);
+}
+
+// コンプ率を計算し表示
+function calcShowComp(num, ssrProb, srProb, aProb, bProb, cProb, dProb, eProb) {
+    document.querySelector("#ssr td:nth-child(4)").textContent = deci2perc(getCompProb(num, SSR_KIND, ssrProb));
+    document.querySelector("#sr td:nth-child(4)").textContent = deci2perc(getCompProb(num, SR_KIND, srProb));
+    document.querySelector("#a td:nth-child(4)").textContent = deci2perc(getCompProb(num, A_KIND, aProb));
+    document.querySelector("#b td:nth-child(4)").textContent = deci2perc(getCompProb(num, B_KIND, bProb));
+    document.querySelector("#c td:nth-child(4)").textContent = deci2perc(getCompProb(num, C_KIND, cProb));
+    document.querySelector("#d td:nth-child(4)").textContent = deci2perc(getCompProb(num, D_KIND, dProb));
+    document.querySelector("#e td:nth-child(4)").textContent = deci2perc(getCompProb(num, E_KIND, eProb));
+}
+function changeComp(num, mode) {
+    if (mode === "normal") calcShowComp(num, SSR_NORM_PROB, SR_NORM_PROB, A_NORM_PROB, B_NORM_PROB, C_NORM_PROB, D_NORM_PROB, E_NORM_PROB);
+    if (mode === "positive")  calcShowComp(num, SSR_POS_PROB, SR_POS_PROB, A_POS_PROB, B_POS_PROB, C_POS_PROB, D_POS_PROB, E_POS_PROB);
+    if (mode === "negative")  calcShowComp(num, SSR_NEG_PROB, SR_NEG_PROB, A_NEG_PROB, B_NEG_PROB, C_NEG_PROB, D_NEG_PROB, E_NEG_PROB);
+    if (mode === "static") calcShowComp(num, ssrStatProb, srStatProb, aStatProb, bStatProb, cStatProb, dStatProb, eStatProb);
+}
+
+
+// 1個以上出る率を計算し表示
+function calcShowOne(num, ssrProb, srProb, aProb, bProb, cProb, dProb, eProb) {
+    document.querySelector("#ssr td:nth-child(5)").textContent = deci2perc(getOneProb(num, ssrProb));
+    document.querySelector("#sr td:nth-child(5)").textContent = deci2perc(getOneProb(num, srProb));
+    document.querySelector("#a td:nth-child(5)").textContent = deci2perc(getOneProb(num, aProb));
+    document.querySelector("#b td:nth-child(5)").textContent = deci2perc(getOneProb(num, bProb));
+    document.querySelector("#c td:nth-child(5)").textContent = deci2perc(getOneProb(num, cProb));
+    document.querySelector("#d td:nth-child(5)").textContent = deci2perc(getOneProb(num, dProb));
+    document.querySelector("#e td:nth-child(5)").textContent = deci2perc(getOneProb(num, eProb));
+}
+function changeOne(num, mode) {
+    if (mode === "normal") calcShowOne(num, SSR_NORM_PROB, SR_NORM_PROB, A_NORM_PROB, B_NORM_PROB, C_NORM_PROB, D_NORM_PROB, E_NORM_PROB);
+    if (mode === "positive")  calcShowOne(num, SSR_POS_PROB, SR_POS_PROB, A_POS_PROB, B_POS_PROB, C_POS_PROB, D_POS_PROB, E_POS_PROB);
+    if (mode === "negative")  calcShowOne(num, SSR_NEG_PROB, SR_NEG_PROB, A_NEG_PROB, B_NEG_PROB, C_NEG_PROB, D_NEG_PROB, E_NEG_PROB);
+    if (mode === "static") calcShowOne(num, ssrStatProb, srStatProb, aStatProb, bStatProb, cStatProb, dStatProb, eStatProb);
+}
+
+// マニュアルモード用
+function makeInputForm() {
+    let inputForm = document.createElement("input");
+    inputForm.type = "text";
+    inputForm.className="form-control form-control-sm";
+    return inputForm;
+}
+
 
 window.onload = function() {
     const button = document.getElementById("exec");
+    const probSelect = document.getElementById("prob_select");
+    // 実測値を更新しておく
+    calcStat();
+
+    // 初期設定
     document.querySelector("#ssr td:nth-child(2)").textContent = SSR_KIND;
-    document.querySelector("#ssr td:nth-child(3)").textContent = deci2perc(SSR_PROB);
     document.querySelector("#sr td:nth-child(2)").textContent = SR_KIND;
-    document.querySelector("#sr td:nth-child(3)").textContent = deci2perc(SR_PROB);
     document.querySelector("#a td:nth-child(2)").textContent = A_KIND;
-    document.querySelector("#a td:nth-child(3)").textContent = deci2perc(A_PROB);
     document.querySelector("#b td:nth-child(2)").textContent = B_KIND;
-    document.querySelector("#b td:nth-child(3)").textContent = deci2perc(B_PROB);
     document.querySelector("#c td:nth-child(2)").textContent = C_KIND;
-    document.querySelector("#c td:nth-child(3)").textContent = deci2perc(C_PROB);
     document.querySelector("#d td:nth-child(2)").textContent = D_KIND;
-    document.querySelector("#d td:nth-child(3)").textContent = deci2perc(D_PROB);
     document.querySelector("#e td:nth-child(2)").textContent = E_KIND;
-    document.querySelector("#e td:nth-child(3)").textContent = deci2perc(E_PROB);
+    changeDistribution("normal")
 
+    // 計算ボタン押下時
     button.addEventListener('click', () => {
-        let num = document.getElementById("num").value;
-        console.log(`${num}回引いてA賞コンプ：${getCompProb(num, 2, 0.012)}`);
+        const num = document.getElementById("num").value;
+        const mode = probSelect.value;
 
-        document.querySelector("#ssr td:nth-child(4)").textContent = deci2perc(getCompProb(num, SSR_KIND, SSR_PROB));
-        document.querySelector("#sr td:nth-child(4)").textContent = deci2perc(getCompProb(num, SR_KIND, SR_PROB));
-        document.querySelector("#a td:nth-child(4)").textContent = deci2perc(getCompProb(num, A_KIND, A_PROB));
-        document.querySelector("#b td:nth-child(4)").textContent = deci2perc(getCompProb(num, B_KIND, B_PROB));
-        document.querySelector("#c td:nth-child(4)").textContent = deci2perc(getCompProb(num, C_KIND, C_PROB));
-        document.querySelector("#d td:nth-child(4)").textContent = deci2perc(getCompProb(num, D_KIND, D_PROB));
-        document.querySelector("#e td:nth-child(4)").textContent = deci2perc(getCompProb(num, E_KIND, E_PROB));
+        document.getElementById("warning").textContent = "";
 
-        document.querySelector("#ssr td:nth-child(5)").textContent = deci2perc(getOneProb(num,  SSR_PROB));
-        document.querySelector("#sr td:nth-child(5)").textContent = deci2perc(getOneProb(num, SR_PROB));
-        document.querySelector("#a td:nth-child(5)").textContent = deci2perc(getOneProb(num, A_PROB));
-        document.querySelector("#b td:nth-child(5)").textContent = deci2perc(getOneProb(num, B_PROB));
-        document.querySelector("#c td:nth-child(5)").textContent = deci2perc(getOneProb(num, C_PROB));
-        document.querySelector("#d td:nth-child(5)").textContent = deci2perc(getOneProb(num, D_PROB));
-        document.querySelector("#e td:nth-child(5)").textContent = deci2perc(getOneProb(num, E_PROB));
+        if(mode !== "manual") {
+            changeComp(num, mode);
+            changeOne(num, mode);
+        } else {
+            const ssrRate = parseFloat(document.querySelector("#ssr td:nth-child(3) input").value) || 0;
+            const srRate = parseFloat(document.querySelector("#sr td:nth-child(3) input").value) || 0;
+            const aRate = parseFloat(document.querySelector("#a td:nth-child(3) input").value) || 0;
+            const bRate = parseFloat(document.querySelector("#b td:nth-child(3) input").value) || 0;
+            const cRate = parseFloat(document.querySelector("#c td:nth-child(3) input").value) || 0;
+            const dRate = parseFloat(document.querySelector("#d td:nth-child(3) input").value) || 0;
+            const eRate = parseFloat(document.querySelector("#e td:nth-child(3) input").value) || 0;
+
+            const sum = ssrRate + srRate + aRate + bRate + cRate + dRate + eRate;
+            if(sum < 99 || 101 < sum) {
+                document.getElementById("warning").textContent = `確率の合計は100%になるようにしてください（現在：${sum}%）`;
+            }
+
+            calcShowComp(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
+            calcShowOne(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
+        }
+
+
     });
+
+    // 提供割合のモード切り替え時
+    probSelect.addEventListener('change', () => {
+        const mode = probSelect.value;
+        
+        if (mode === "static") {
+            document.getElementById("size").textContent = "（N = " + sampleSize  + "）";
+        } else {
+            document.getElementById("size").textContent = "";
+        }
+
+        if(mode === "manual") {
+            document.querySelector("#ssr td:nth-child(3) span").textContent = "";
+            document.querySelector("#sr td:nth-child(3) span").textContent = "";
+            document.querySelector("#a td:nth-child(3) span").textContent = "";
+            document.querySelector("#b td:nth-child(3) span").textContent = "";
+            document.querySelector("#c td:nth-child(3) span").textContent = "";
+            document.querySelector("#d td:nth-child(3) span").textContent = "";
+            document.querySelector("#e td:nth-child(3) span").textContent = "";
+            document.querySelector("#ssr td:nth-child(3) span").appendChild(makeInputForm());
+            document.querySelector("#sr td:nth-child(3) span").appendChild(makeInputForm());
+            document.querySelector("#a td:nth-child(3) span").appendChild(makeInputForm());
+            document.querySelector("#b td:nth-child(3) span").appendChild(makeInputForm());
+            document.querySelector("#c td:nth-child(3) span").appendChild(makeInputForm());
+            document.querySelector("#d td:nth-child(3) span").appendChild(makeInputForm());
+            document.querySelector("#e td:nth-child(3) span").appendChild(makeInputForm());
+        }
+        changeDistribution(mode);
+    });
+
+
+
+
 }
