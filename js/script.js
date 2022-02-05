@@ -147,10 +147,10 @@ function calcStat() {
     const SSR_NUM = 0;
     const SR_NUM = 0;
     const A_NUM = 0;
-    const B_NUM = 0;
-    const C_NUM = 0;
-    const D_NUM = 0;
-    const E_NUM = 1;
+    const B_NUM = 1;
+    const C_NUM = 2;
+    const D_NUM = 3;
+    const E_NUM = 4;
 
     sampleSize = SSR_NUM + SR_NUM + A_NUM + B_NUM + C_NUM + D_NUM + E_NUM;
     ssrStatProb = SSR_NUM / sampleSize;
