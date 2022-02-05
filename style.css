@@ -1,4 +1,7 @@
 tbody span {
     display: inline-block;
-	width: 12%;
+}
+
+.rate {
+    width: 30%;
 }

@@ -32,23 +32,27 @@
         <tr>
           <th class="col-md-1">賞</th>
           <th class="col-md-1">種類</th>
-          <th class="col-md-2">
+          <th class="col-md-1">
             提供割合
-            <span id="size"></span>
           </th>
           <th class="col-md-2">コンプ率</th>
-          <th class="col-md-2">1個以上出る確率</th>
+          <th class="col-md-2">1個以上出る率</th>
         </tr>
         <tr class="col-sm2">
           <th></th>
           <th></th>
           <th>
-            <select name="prob_select" id="prob_select" class="form-select form-select-sm" style="width:40%">
-              <option value="normal">標準予測</option>
-              <option value="positive">楽観的予測</option>
-              <option value="negative">悲観的予測</option>
-              <option value="manual">手動入力</option>
-              <option value="static">実測値</option>
+            <select
+              name="prob_select"
+              id="prob_select"
+              class="form-select form-select-sm"
+              style="width: 40%"
+            >
+              <option value="normal">標準</option>
+              <option value="positive">楽観的</option>
+              <option value="negative">悲観的</option>
+              <option value="manual">手動</option>
+              <option value="static">実測</option>
             </select>
           </th>
           <th></th>
@@ -59,54 +63,62 @@
         <tr id="ssr">
           <td>激レア賞</td>
           <td></td>
-          <td><span class=rate></span>%</td>
+          <td><span class="rate"></span><span>%</span></td>
           <td></td>
           <td></td>
         </tr>
         <tr id="sr">
           <td>レア賞</td>
           <td></td>
-          <td><span class=rate></span>%</td>
+          <td><span class="rate"></span><span>%</span></td>
           <td></td>
           <td></td>
         </tr>
         <tr id="a">
           <td>A賞</td>
           <td></td>
-          <td><span class=rate></span>%</td>
+          <td><span class="rate"></span><span>%</span></td>
           <td></td>
           <td></td>
         </tr>
         <tr id="b">
           <td>B賞</td>
           <td></td>
-          <td><span class=rate></span>%</td>
+          <td><span class="rate"></span><span>%</span></td>
           <td></td>
           <td></td>
         </tr>
         <tr id="c">
           <td>C賞</td>
           <td></td>
-          <td><span class=rate></span>%</td>
+          <td><span class="rate"></span><span>%</span></td>
           <td></td>
           <td></td>
         </tr>
         <tr id="d">
           <td>D賞</td>
           <td></td>
-          <td><span class=rate></span>%</td>
+          <td><span class="rate"></span><span>%</span></td>
           <td></td>
           <td></td>
         </tr>
         <tr id="e">
           <td>E賞</td>
           <td></td>
-          <td><span class=rate></span>%</td>
+          <td><span class="rate"></span><span>%</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><span id="size"></span></td>
           <td></td>
           <td></td>
         </tr>
       </tbody>
     </table>
+    
 
     <p class="text-start">
       例えばE賞のどれかが当たる確率が55%, 特定の1種類が当たる確率は5.5%です。<br />
