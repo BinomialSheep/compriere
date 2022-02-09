@@ -90,12 +90,14 @@ function getOneProb(n, p) {
     return 1 - ((1 - p) ** n);
 }
 
-// 小数点2桁でパーセント表記
+// 小数点3桁でパーセント表記
 function deci2perc(num) {
-    return (num * 100).toFixed(1) + "%";
+    return (num * 100).toFixed(2) + "%";
 }
+// こっちは3桁にしてる
+// 未使用になった
 function deci2percWithOutParcent(num) {
-    return (num * 100).toFixed(1);
+    return (num * 100).toFixed(2);
 }
 
 
@@ -108,28 +110,28 @@ const D_KIND = 8;
 const E_KIND = 10;
 
 const SSR_NORM_PROB = 0.002;
-const SR_NORM_PROB = 0.006;
-const A_NORM_PROB = 0.012;
-const B_NORM_PROB = 0.08;
-const C_NORM_PROB = 0.15;
-const D_NORM_PROB = 0.2;
-const E_NORM_PROB = 0.55;
+const SR_NORM_PROB = 0.002;
+const A_NORM_PROB = 0.011;
+const B_NORM_PROB = 0.04;
+const C_NORM_PROB = 0.195;
+const D_NORM_PROB = 0.195;
+const E_NORM_PROB = 0.555;
 
-const SSR_POS_PROB = 0.004;
-const SR_POS_PROB = 0.008;
-const A_POS_PROB = 0.015;
-const B_POS_PROB = 0.08;
-const C_POS_PROB = 0.15;
+const SSR_POS_PROB = 0.0025;
+const SR_POS_PROB = 0.0025;
+const A_POS_PROB = 0.012;
+const B_POS_PROB = 0.04;
+const C_POS_PROB = 0.2;
 const D_POS_PROB = 0.2;
 const E_POS_PROB = 0.543;
 
-const SSR_NEG_PROB = 0.001;
-const SR_NEG_PROB = 0.004;
-const A_NEG_PROB = 0.010;
-const B_NEG_PROB = 0.08;
-const C_NEG_PROB = 0.15;
+const SSR_NEG_PROB = 0.0015;
+const SR_NEG_PROB = 0.0015;
+const A_NEG_PROB = 0.01;
+const B_NEG_PROB = 0.037;
+const C_NEG_PROB = 0.2;
 const D_NEG_PROB = 0.2;
-const E_NEG_PROB = 0.555;
+const E_NEG_PROB = 0.55;
 
 
 let sampleSize = 1;
@@ -147,10 +149,10 @@ function calcStat() {
     const SSR_NUM = 0;
     const SR_NUM = 0;
     const A_NUM = 0;
-    const B_NUM = 1;
-    const C_NUM = 2;
-    const D_NUM = 3;
-    const E_NUM = 4;
+    const B_NUM = 0;
+    const C_NUM = 0;
+    const D_NUM = 0;
+    const E_NUM = 1;
 
     sampleSize = SSR_NUM + SR_NUM + A_NUM + B_NUM + C_NUM + D_NUM + E_NUM;
     ssrStatProb = SSR_NUM / sampleSize;
@@ -165,13 +167,13 @@ function calcStat() {
 
 // 提供率の表示
 function showdistribution(ssrProb, srProb, aProb, bProb, cProb, dProb, eProb) {
-    document.querySelector("#ssr td:nth-child(3) span").textContent = deci2percWithOutParcent(ssrProb);
-    document.querySelector("#sr td:nth-child(3) span").textContent = deci2percWithOutParcent(srProb);
-    document.querySelector("#a td:nth-child(3) span").textContent = deci2percWithOutParcent(aProb);
-    document.querySelector("#b td:nth-child(3) span").textContent = deci2percWithOutParcent(bProb);
-    document.querySelector("#c td:nth-child(3) span").textContent = deci2percWithOutParcent(cProb);
-    document.querySelector("#d td:nth-child(3) span").textContent = deci2percWithOutParcent(dProb);
-    document.querySelector("#e td:nth-child(3) span").textContent = deci2percWithOutParcent(eProb);
+    document.querySelector("#ssr td:nth-child(3) span").textContent = deci2perc(ssrProb);
+    document.querySelector("#sr td:nth-child(3) span").textContent = deci2perc(srProb);
+    document.querySelector("#a td:nth-child(3) span").textContent = deci2perc(aProb);
+    document.querySelector("#b td:nth-child(3) span").textContent = deci2perc(bProb);
+    document.querySelector("#c td:nth-child(3) span").textContent = deci2perc(cProb);
+    document.querySelector("#d td:nth-child(3) span").textContent = deci2perc(dProb);
+    document.querySelector("#e td:nth-child(3) span").textContent = deci2perc(eProb);
 }
 function changeDistribution(mode) {
     if (mode === "normal") showdistribution(SSR_NORM_PROB, SR_NORM_PROB, A_NORM_PROB, B_NORM_PROB, C_NORM_PROB, D_NORM_PROB, E_NORM_PROB);
@@ -303,8 +305,11 @@ window.onload = function() {
             document.querySelector("#c td:nth-child(3) span").appendChild(makeInputForm());
             document.querySelector("#d td:nth-child(3) span").appendChild(makeInputForm());
             document.querySelector("#e td:nth-child(3) span").appendChild(makeInputForm());
+            document.querySelectorAll(".percent").forEach(node => node.textContent = "%");
+        } else {
+            document.querySelectorAll(".percent").forEach(node => node.textContent = "");
+            changeDistribution(mode);
         }
-        changeDistribution(mode);
 
         // 数値の更新
         const num = document.getElementById("num").value;
