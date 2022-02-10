@@ -146,13 +146,13 @@ let eStatProb = 1.00;
 // 統計値の計算
 function calcStat() {
     // ここを手動で更新する
-    const SSR_NUM = 0;
-    const SR_NUM = 0;
-    const A_NUM = 0;
-    const B_NUM = 0;
-    const C_NUM = 0;
-    const D_NUM = 0;
-    const E_NUM = 1;
+    const SSR_NUM = 1;
+    const SR_NUM = 1;
+    const A_NUM = 3;
+    const B_NUM = 20;
+    const C_NUM = 94;
+    const D_NUM = 118;
+    const E_NUM = 319;
 
     sampleSize = SSR_NUM + SR_NUM + A_NUM + B_NUM + C_NUM + D_NUM + E_NUM;
     ssrStatProb = SSR_NUM / sampleSize;
