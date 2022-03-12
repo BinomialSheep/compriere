@@ -21,6 +21,14 @@ class DisjointSet {
     rank[x] = 0;
   }
 
+  // 新しく要素数1の木を追加する
+  int addSet() {
+    int ret = p.size();
+    p.push_back(ret);
+    rank.push_back(0);
+    return ret;
+  }
+
   // 同じ木に所属しているか
   bool same(int x, int y) { return findSet(x) == findSet(y); }
   // xが所属する木とyが所属する木の合成
@@ -48,99 +56,87 @@ class DisjointSet {
 };
 
 int main() {
-  vector<pair<string, int>> itemUserPL;
-  int userNum;
+  auto start = clock();
 
   /* input */
-  // ファイル末尾まで受取り、「あるアイテムと引いたユーザーの組のリスト」として保持
+  // ファイル末尾まで受取り、「ユーザーと引いたアイテムの組のリスト」として保持
+  vector<pair<int, string>> inputPairList;
   while (!cin.eof()) {
-    int u;
-    string s;
-    cin >> u >> s;
-    itemUserPL.emplace_back(s, u);
-  }
-  // あとでユーザーの数を使う
-  userNum = itemUserPL[itemUserPL.size() - 1].second;
-
-  /* アイテムの数だけ「そのアイテムを引いたユーザーの集合」を作成 */
-  map<string, set<int>> itemUserMap;
-  set<int> users;
-  // 文字列の昇順でソート
-  sort(itemUserPL.begin(), itemUserPL.end());
-  // 番兵
-  itemUserPL.emplace_back("", -1);
-  // i = 0
-  users.insert(itemUserPL[0].second);
-  for (int i = 1; i < itemUserPL.size(); i++) {
-    if (itemUserPL[i - 1].first == itemUserPL[i].first) {
-      // 今の集合に追加
-      users.insert(itemUserPL[i].second);
-    } else {
-      // 1つ前までをマップに追加して集合をリセット
-      itemUserMap[itemUserPL[i - 1].first] = users;
-      users.clear();
-      users.insert(itemUserPL[i].second);
-    }
+    int userId;
+    string itemId;
+    cin >> userId >> itemId;
+    inputPairList.emplace_back(userId, itemId);
   }
 
-  /* // for debug
-  for (auto dict : itemUserMap) {
-    cout << "商品：" << dict.first << endl;
-    for (auto users : dict.second) {
-      cout << users << ", ";
-    }
-    cout << endl;
-  }
-  */
+  // auto end = clock();
+  // cout << "読み込み時間" << (double)(end - start) / CLOCKS_PER_SEC << endl;
 
-  /* 同じガチャのUFTを作る */
+  /* ガチャごとのアイテムのUTFを作る */
+  // 既知のアイテムと、その親番号のmap
+  unordered_map<string, int> itemMap;
+  // 別タスクとして、あるガチャ（暫定）を最初と最後に引いたユーザーを覚えておく
+  unordered_map<int, int> firstUser;
+  unordered_map<int, int> finalUser;
+
   // 初期化
-  DisjointSet unionFindTree(itemUserMap.size());
-
-  // 「同じユーザーが引いたガチャは同じガチャ」という条件で木を合成
-  for (int i = 1; i <= userNum; i++) {
-    int lastInclude = -1;
-    int j = 0;
-    for (auto itemUsers : itemUserMap) {
-      if (itemUsers.second.find(i) != itemUsers.second.end()) {
-        if (lastInclude != -1) {
-          // 2つのアイテムを同じユーザーが引いていれば、その2つのアイテムは同じガチャ
-          unionFindTree.unite(lastInclude, j);
-        }
-        lastInclude = j;
-      }
-      j++;
+  DisjointSet unionFindTree(0);
+  // 直前のアイテムを引いたユーザー
+  int lastUser = -1;
+  // 直前のアイテムのガチャ
+  int lastGacha = -1;
+  for (int i = 0; i < inputPairList.size(); i++) {
+    int userId = inputPairList[i].first;
+    string itemId = inputPairList[i].second;
+    //
+    int thisGacha;
+    if (itemMap.count(itemId) == 0) {
+      // 初出のガチャなら新しい木を生成する
+      thisGacha = unionFindTree.addSet();
+      itemMap[itemId] = thisGacha;
+      // 別タスク：最初に引いたユーザとして覚えておく
+      firstUser[thisGacha] = userId;
+    } else {
+      // 既出のガチャならmapから取り出す
+      thisGacha = itemMap[itemId];
     }
+    // 別タスク：最後に引いたユーザーの更新
+    finalUser[thisGacha] = userId;
+
+    // 同じユーザーなら合成
+    if (lastUser == userId) {
+      unionFindTree.unite(lastGacha, thisGacha);
+    }
+    // 更新
+    lastUser = userId;
+    lastGacha = unionFindTree.findSet(thisGacha);
+  }
+
+  // ガチャごとのアイテムのリストに整理
+  map<int, vector<string>> gachaItemMap;
+  for (auto im : itemMap) {
+    int gachaId = unionFindTree.findSet(im.second);
+    gachaItemMap[gachaId].push_back(im.first);
+    // 別タスク：最初と最後に引いたユーザーを更新
+    firstUser[gachaId] = min(firstUser[gachaId], firstUser[im.second]);
+    finalUser[gachaId] = max(finalUser[gachaId], finalUser[im.second]);
   }
 
   /* 出力 */
-  //ガチャごとのアイテムのリストに整理
-  map<int, vector<string>> gachaItemMap;
-  int i = 0;
-  for (auto itemUsers : itemUserMap) {
-    gachaItemMap[unionFindTree.p[i]].push_back(itemUsers.first);
-    i++;
-  }
-
-  // ガチャIDを連番に振り直しながら標準出力する
-  int gachaID = 1;
+  cout << "ガチャID アイテムID" << endl;
+  int gachaId = 1;
   for (auto gacha : gachaItemMap) {
     for (auto item : gacha.second) {
-      // cout << "ガチャID：" << gachaID << " アイテムID：" << item << endl;
-      cout << gachaID << " " << item << endl;
+      cout << gachaId << " " << item << endl;
     }
-    gachaID++;
+    gachaId++;
   }
-
-  /* 出力 */
-  /*
-  int i = 0;
-  for (auto itemUsers : itemUserMap) {
-    cout << "ガチャID：" << unionFindTree.p[i] << " アイテムID："
-         << itemUsers.first << endl;
-    i++;
+  cout << "ガチャID 最初に引いたユーザー 最後に引いたユーザー" << endl;
+  gachaId = 1;
+  for (auto gacha : gachaItemMap) {
+    cout << gachaId << " " << firstUser[gacha.first] << " "
+         << finalUser[gacha.first] << endl;
+    gachaId++;
   }
-  */
 
   return 0;
 }
