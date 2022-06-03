@@ -107,10 +107,10 @@ const E_KIND = 10;
 const SSR_ASAMI_PROB = 0.001;
 const SR_ASAMI_PROB = 0.001;
 const A_ASAMI_PROB = 0.008;
-const B_ASAMI_PROB = 0.04;
-const C_ASAMI_PROB = 0.2;
-const D_ASAMI_PROB = 0.2;
-const E_ASAMI_PROB = 0.55;
+const B_ASAMI_PROB = 0.03;
+const C_ASAMI_PROB = 0.19;
+const D_ASAMI_PROB = 0.19;
+const E_ASAMI_PROB = 0.58;
 
 const SSR_NORM_PROB = 0.002;
 const SR_NORM_PROB = 0.002;
@@ -150,11 +150,11 @@ function calcStat() {
   // ここを手動で更新する
   const SSR_NUM = 2;
   const SR_NUM = 2;
-  const A_NUM = 18;
-  const B_NUM = 40;
-  const C_NUM = 355;
-  const D_NUM = 297;
-  const E_NUM = 1073;
+  const A_NUM = 20;
+  const B_NUM = 57;
+  const C_NUM = 531;
+  const D_NUM = 429;
+  const E_NUM = 1612;
 
   sampleSize = SSR_NUM + SR_NUM + A_NUM + B_NUM + C_NUM + D_NUM + E_NUM;
   ssrStatProb = SSR_NUM / sampleSize;
