@@ -96,13 +96,13 @@ function deci2percWithOutParcent(num) {
   return (num * 100).toFixed(2);
 }
 
-const SSR_KIND = 1;
-const SR_KIND = 1;
-const A_KIND = 2;
-const B_KIND = 3;
-const C_KIND = 5;
-const D_KIND = 8;
-const E_KIND = 10;
+let SSR_KIND = 1;
+let SR_KIND = 1;
+let A_KIND = 2;
+let B_KIND = 3;
+let C_KIND = 5;
+let D_KIND = 8;
+let E_KIND = 10;
 
 const SSR_ASAMI_PROB = 0.001;
 const SR_ASAMI_PROB = 0.001;
@@ -111,6 +111,14 @@ const B_ASAMI_PROB = 0.03;
 const C_ASAMI_PROB = 0.19;
 const D_ASAMI_PROB = 0.19;
 const E_ASAMI_PROB = 0.58;
+
+const SSR_NAKURU_PROB = 0;
+const SR_NAKURU_PROB = 0;
+const A_NAKURU_PROB = 0.01;
+const B_NAKURU_PROB = 0.1;
+const C_NAKURU_PROB = 0.12;
+const D_NAKURU_PROB = 0.32;
+const E_NAKURU_PROB = 0.45;
 
 const SSR_NORM_PROB = 0.002;
 const SR_NORM_PROB = 0.002;
@@ -168,20 +176,41 @@ function calcStat() {
 
 // 提供率の表示
 function showdistribution(ssrProb, srProb, aProb, bProb, cProb, dProb, eProb) {
-  document.querySelector("#ssr td:nth-child(3) span").textContent =
-    deci2perc(ssrProb);
-  document.querySelector("#sr td:nth-child(3) span").textContent =
-    deci2perc(srProb);
-  document.querySelector("#a td:nth-child(3) span").textContent =
-    deci2perc(aProb);
-  document.querySelector("#b td:nth-child(3) span").textContent =
-    deci2perc(bProb);
-  document.querySelector("#c td:nth-child(3) span").textContent =
-    deci2perc(cProb);
-  document.querySelector("#d td:nth-child(3) span").textContent =
-    deci2perc(dProb);
-  document.querySelector("#e td:nth-child(3) span").textContent =
-    deci2perc(eProb);
+  document.querySelector("#ssr td:nth-child(3) span").textContent = deci2perc(ssrProb);
+  document.querySelector("#sr td:nth-child(3) span").textContent = deci2perc(srProb);
+  document.querySelector("#a td:nth-child(3) span").textContent = deci2perc(aProb);
+  document.querySelector("#b td:nth-child(3) span").textContent = deci2perc(bProb);
+  document.querySelector("#c td:nth-child(3) span").textContent = deci2perc(cProb);
+  document.querySelector("#d td:nth-child(3) span").textContent = deci2perc(dProb);
+  document.querySelector("#e td:nth-child(3) span").textContent = deci2perc(eProb);
+}
+// 総種類数の表示
+function showKinds(mode) {
+  if (mode === "nakuru") {
+    SSR_KIND = 1;
+    SR_KIND = 1;
+    A_KIND = 1;
+    B_KIND = 4;
+    C_KIND = 3;
+    D_KIND = 8;
+    E_KIND = 5;
+  } else {
+    SSR_KIND = 1;
+    SR_KIND = 1;
+    A_KIND = 2;
+    B_KIND = 3;
+    C_KIND = 5;
+    D_KIND = 8;
+    E_KIND = 10;
+  }
+
+  document.querySelector("#ssr td:nth-child(2)").textContent = SSR_KIND;
+  document.querySelector("#sr td:nth-child(2)").textContent = SR_KIND;
+  document.querySelector("#a td:nth-child(2)").textContent = A_KIND;
+  document.querySelector("#b td:nth-child(2)").textContent = B_KIND;
+  document.querySelector("#c td:nth-child(2)").textContent = C_KIND;
+  document.querySelector("#d td:nth-child(2)").textContent = D_KIND;
+  document.querySelector("#e td:nth-child(2)").textContent = E_KIND;
 }
 function changeDistribution(mode) {
   if (mode === "asamiyui")
@@ -194,71 +223,35 @@ function changeDistribution(mode) {
       D_ASAMI_PROB,
       E_ASAMI_PROB
     );
+  if (mode === "nakuru")
+    showdistribution(
+      SSR_NAKURU_PROB,
+      SR_NAKURU_PROB,
+      A_NAKURU_PROB,
+      B_NAKURU_PROB,
+      C_NAKURU_PROB,
+      D_NAKURU_PROB,
+      E_NAKURU_PROB
+    );
   if (mode === "normal")
-    showdistribution(
-      SSR_NORM_PROB,
-      SR_NORM_PROB,
-      A_NORM_PROB,
-      B_NORM_PROB,
-      C_NORM_PROB,
-      D_NORM_PROB,
-      E_NORM_PROB
-    );
+    showdistribution(SSR_NORM_PROB, SR_NORM_PROB, A_NORM_PROB, B_NORM_PROB, C_NORM_PROB, D_NORM_PROB, E_NORM_PROB);
   if (mode === "positive")
-    showdistribution(
-      SSR_POS_PROB,
-      SR_POS_PROB,
-      A_POS_PROB,
-      B_POS_PROB,
-      C_POS_PROB,
-      D_POS_PROB,
-      E_POS_PROB
-    );
+    showdistribution(SSR_POS_PROB, SR_POS_PROB, A_POS_PROB, B_POS_PROB, C_POS_PROB, D_POS_PROB, E_POS_PROB);
   if (mode === "negative")
-    showdistribution(
-      SSR_NEG_PROB,
-      SR_NEG_PROB,
-      A_NEG_PROB,
-      B_NEG_PROB,
-      C_NEG_PROB,
-      D_NEG_PROB,
-      E_NEG_PROB
-    );
+    showdistribution(SSR_NEG_PROB, SR_NEG_PROB, A_NEG_PROB, B_NEG_PROB, C_NEG_PROB, D_NEG_PROB, E_NEG_PROB);
   if (mode === "static")
-    showdistribution(
-      ssrStatProb,
-      srStatProb,
-      aStatProb,
-      bStatProb,
-      cStatProb,
-      dStatProb,
-      eStatProb
-    );
+    showdistribution(ssrStatProb, srStatProb, aStatProb, bStatProb, cStatProb, dStatProb, eStatProb);
 }
 
 // コンプ率を計算し表示
 function calcShowComp(num, ssrProb, srProb, aProb, bProb, cProb, dProb, eProb) {
-  document.querySelector("#ssr td:nth-child(4)").textContent = deci2perc(
-    getCompProb(num, SSR_KIND, ssrProb)
-  );
-  document.querySelector("#sr td:nth-child(4)").textContent = deci2perc(
-    getCompProb(num, SR_KIND, srProb)
-  );
-  document.querySelector("#a td:nth-child(4)").textContent = deci2perc(
-    getCompProb(num, A_KIND, aProb)
-  );
-  document.querySelector("#b td:nth-child(4)").textContent = deci2perc(
-    getCompProb(num, B_KIND, bProb)
-  );
-  document.querySelector("#c td:nth-child(4)").textContent = deci2perc(
-    getCompProb(num, C_KIND, cProb)
-  );
-  document.querySelector("#d td:nth-child(4)").textContent = deci2perc(
-    getCompProb(num, D_KIND, dProb)
-  );
-  document.querySelector("#e td:nth-child(4)").textContent = deci2perc(
-    getCompProb(num, E_KIND, eProb)
-  );
+  document.querySelector("#ssr td:nth-child(4)").textContent = deci2perc(getCompProb(num, SSR_KIND, ssrProb));
+  document.querySelector("#sr td:nth-child(4)").textContent = deci2perc(getCompProb(num, SR_KIND, srProb));
+  document.querySelector("#a td:nth-child(4)").textContent = deci2perc(getCompProb(num, A_KIND, aProb));
+  document.querySelector("#b td:nth-child(4)").textContent = deci2perc(getCompProb(num, B_KIND, bProb));
+  document.querySelector("#c td:nth-child(4)").textContent = deci2perc(getCompProb(num, C_KIND, cProb));
+  document.querySelector("#d td:nth-child(4)").textContent = deci2perc(getCompProb(num, D_KIND, dProb));
+  document.querySelector("#e td:nth-child(4)").textContent = deci2perc(getCompProb(num, E_KIND, eProb));
 }
 function changeComp(num, mode) {
   if (mode === "asamiyui")
@@ -272,75 +265,36 @@ function changeComp(num, mode) {
       D_ASAMI_PROB,
       E_ASAMI_PROB
     );
+  if (mode === "nakuru")
+    calcShowComp(
+      num,
+      SSR_NAKURU_PROB,
+      SR_NAKURU_PROB,
+      A_NAKURU_PROB,
+      B_NAKURU_PROB,
+      C_NAKURU_PROB,
+      D_NAKURU_PROB,
+      E_NAKURU_PROB
+    );
   if (mode === "normal")
-    calcShowComp(
-      num,
-      SSR_NORM_PROB,
-      SR_NORM_PROB,
-      A_NORM_PROB,
-      B_NORM_PROB,
-      C_NORM_PROB,
-      D_NORM_PROB,
-      E_NORM_PROB
-    );
+    calcShowComp(num, SSR_NORM_PROB, SR_NORM_PROB, A_NORM_PROB, B_NORM_PROB, C_NORM_PROB, D_NORM_PROB, E_NORM_PROB);
   if (mode === "positive")
-    calcShowComp(
-      num,
-      SSR_POS_PROB,
-      SR_POS_PROB,
-      A_POS_PROB,
-      B_POS_PROB,
-      C_POS_PROB,
-      D_POS_PROB,
-      E_POS_PROB
-    );
+    calcShowComp(num, SSR_POS_PROB, SR_POS_PROB, A_POS_PROB, B_POS_PROB, C_POS_PROB, D_POS_PROB, E_POS_PROB);
   if (mode === "negative")
-    calcShowComp(
-      num,
-      SSR_NEG_PROB,
-      SR_NEG_PROB,
-      A_NEG_PROB,
-      B_NEG_PROB,
-      C_NEG_PROB,
-      D_NEG_PROB,
-      E_NEG_PROB
-    );
+    calcShowComp(num, SSR_NEG_PROB, SR_NEG_PROB, A_NEG_PROB, B_NEG_PROB, C_NEG_PROB, D_NEG_PROB, E_NEG_PROB);
   if (mode === "static")
-    calcShowComp(
-      num,
-      ssrStatProb,
-      srStatProb,
-      aStatProb,
-      bStatProb,
-      cStatProb,
-      dStatProb,
-      eStatProb
-    );
+    calcShowComp(num, ssrStatProb, srStatProb, aStatProb, bStatProb, cStatProb, dStatProb, eStatProb);
 }
 
 // 1個以上出る率を計算し表示
 function calcShowOne(num, ssrProb, srProb, aProb, bProb, cProb, dProb, eProb) {
-  document.querySelector("#ssr td:nth-child(5)").textContent = deci2perc(
-    getOneProb(num, ssrProb)
-  );
-  document.querySelector("#sr td:nth-child(5)").textContent = deci2perc(
-    getOneProb(num, srProb)
-  );
-  document.querySelector("#a td:nth-child(5)").textContent = deci2perc(
-    getOneProb(num, aProb)
-  );
-  document.querySelector("#b td:nth-child(5)").textContent = deci2perc(
-    getOneProb(num, bProb)
-  );
-  document.querySelector("#c td:nth-child(5)").textContent = deci2perc(
-    getOneProb(num, cProb)
-  );
-  document.querySelector("#d td:nth-child(5)").textContent = deci2perc(
-    getOneProb(num, dProb)
-  );
-  document.querySelector("#e td:nth-child(5)").textContent = deci2perc(
-    getOneProb(num, eProb)
-  );
+  document.querySelector("#ssr td:nth-child(5)").textContent = deci2perc(getOneProb(num, ssrProb));
+  document.querySelector("#sr td:nth-child(5)").textContent = deci2perc(getOneProb(num, srProb));
+  document.querySelector("#a td:nth-child(5)").textContent = deci2perc(getOneProb(num, aProb));
+  document.querySelector("#b td:nth-child(5)").textContent = deci2perc(getOneProb(num, bProb));
+  document.querySelector("#c td:nth-child(5)").textContent = deci2perc(getOneProb(num, cProb));
+  document.querySelector("#d td:nth-child(5)").textContent = deci2perc(getOneProb(num, dProb));
+  document.querySelector("#e td:nth-child(5)").textContent = deci2perc(getOneProb(num, eProb));
 }
 function changeOne(num, mode) {
   if (mode === "asamiyui")
@@ -354,50 +308,25 @@ function changeOne(num, mode) {
       D_ASAMI_PROB,
       E_ASAMI_PROB
     );
+  if (mode === "nakuru")
+    calcShowOne(
+      num,
+      SSR_NAKURU_PROB,
+      SR_NAKURU_PROB,
+      A_NAKURU_PROB,
+      B_NAKURU_PROB,
+      C_NAKURU_PROB,
+      D_NAKURU_PROB,
+      E_NAKURU_PROB
+    );
   if (mode === "normal")
-    calcShowOne(
-      num,
-      SSR_NORM_PROB,
-      SR_NORM_PROB,
-      A_NORM_PROB,
-      B_NORM_PROB,
-      C_NORM_PROB,
-      D_NORM_PROB,
-      E_NORM_PROB
-    );
+    calcShowOne(num, SSR_NORM_PROB, SR_NORM_PROB, A_NORM_PROB, B_NORM_PROB, C_NORM_PROB, D_NORM_PROB, E_NORM_PROB);
   if (mode === "positive")
-    calcShowOne(
-      num,
-      SSR_POS_PROB,
-      SR_POS_PROB,
-      A_POS_PROB,
-      B_POS_PROB,
-      C_POS_PROB,
-      D_POS_PROB,
-      E_POS_PROB
-    );
+    calcShowOne(num, SSR_POS_PROB, SR_POS_PROB, A_POS_PROB, B_POS_PROB, C_POS_PROB, D_POS_PROB, E_POS_PROB);
   if (mode === "negative")
-    calcShowOne(
-      num,
-      SSR_NEG_PROB,
-      SR_NEG_PROB,
-      A_NEG_PROB,
-      B_NEG_PROB,
-      C_NEG_PROB,
-      D_NEG_PROB,
-      E_NEG_PROB
-    );
+    calcShowOne(num, SSR_NEG_PROB, SR_NEG_PROB, A_NEG_PROB, B_NEG_PROB, C_NEG_PROB, D_NEG_PROB, E_NEG_PROB);
   if (mode === "static")
-    calcShowOne(
-      num,
-      ssrStatProb,
-      srStatProb,
-      aStatProb,
-      bStatProb,
-      cStatProb,
-      dStatProb,
-      eStatProb
-    );
+    calcShowOne(num, ssrStatProb, srStatProb, aStatProb, bStatProb, cStatProb, dStatProb, eStatProb);
 }
 
 // マニュアルモード用
@@ -416,50 +345,21 @@ function calcAndShow(num, mode) {
     changeComp(num, mode);
     changeOne(num, mode);
   } else {
-    const ssrRate =
-      parseFloat(document.querySelector("#ssr td:nth-child(3) input").value) ||
-      0;
-    const srRate =
-      parseFloat(document.querySelector("#sr td:nth-child(3) input").value) ||
-      0;
-    const aRate =
-      parseFloat(document.querySelector("#a td:nth-child(3) input").value) || 0;
-    const bRate =
-      parseFloat(document.querySelector("#b td:nth-child(3) input").value) || 0;
-    const cRate =
-      parseFloat(document.querySelector("#c td:nth-child(3) input").value) || 0;
-    const dRate =
-      parseFloat(document.querySelector("#d td:nth-child(3) input").value) || 0;
-    const eRate =
-      parseFloat(document.querySelector("#e td:nth-child(3) input").value) || 0;
+    const ssrRate = parseFloat(document.querySelector("#ssr td:nth-child(3) input").value) || 0;
+    const srRate = parseFloat(document.querySelector("#sr td:nth-child(3) input").value) || 0;
+    const aRate = parseFloat(document.querySelector("#a td:nth-child(3) input").value) || 0;
+    const bRate = parseFloat(document.querySelector("#b td:nth-child(3) input").value) || 0;
+    const cRate = parseFloat(document.querySelector("#c td:nth-child(3) input").value) || 0;
+    const dRate = parseFloat(document.querySelector("#d td:nth-child(3) input").value) || 0;
+    const eRate = parseFloat(document.querySelector("#e td:nth-child(3) input").value) || 0;
 
     const sum = ssrRate + srRate + aRate + bRate + cRate + dRate + eRate;
     if (sum < 99 || 101 < sum) {
-      document.getElementById(
-        "warning"
-      ).textContent = `確率の合計は100%になるようにしてください（現在：${sum}%）`;
+      document.getElementById("warning").textContent = `確率の合計は100%になるようにしてください（現在：${sum}%）`;
     }
 
-    calcShowComp(
-      num,
-      ssrRate / 100,
-      srRate / 100,
-      aRate / 100,
-      bRate / 100,
-      cRate / 100,
-      dRate / 100,
-      eRate / 100
-    );
-    calcShowOne(
-      num,
-      ssrRate / 100,
-      srRate / 100,
-      aRate / 100,
-      bRate / 100,
-      cRate / 100,
-      dRate / 100,
-      eRate / 100
-    );
+    calcShowComp(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
+    calcShowOne(num, ssrRate / 100, srRate / 100, aRate / 100, bRate / 100, cRate / 100, dRate / 100, eRate / 100);
   }
 }
 
@@ -470,14 +370,8 @@ window.onload = function () {
   calcStat();
 
   // 初期設定
-  document.querySelector("#ssr td:nth-child(2)").textContent = SSR_KIND;
-  document.querySelector("#sr td:nth-child(2)").textContent = SR_KIND;
-  document.querySelector("#a td:nth-child(2)").textContent = A_KIND;
-  document.querySelector("#b td:nth-child(2)").textContent = B_KIND;
-  document.querySelector("#c td:nth-child(2)").textContent = C_KIND;
-  document.querySelector("#d td:nth-child(2)").textContent = D_KIND;
-  document.querySelector("#e td:nth-child(2)").textContent = E_KIND;
-  changeDistribution("asamiyui");
+  showKinds("nakuru");
+  changeDistribution("nakuru");
 
   // 計算ボタン押下時
   button.addEventListener("click", () => {
@@ -491,8 +385,7 @@ window.onload = function () {
     const mode = probSelect.value;
 
     if (mode === "static") {
-      document.getElementById("size").textContent =
-        "（N = " + sampleSize + "）";
+      document.getElementById("size").textContent = "（N = " + sampleSize + "）";
     } else {
       document.getElementById("size").textContent = "";
     }
@@ -505,35 +398,19 @@ window.onload = function () {
       document.querySelector("#c td:nth-child(3) span").textContent = "";
       document.querySelector("#d td:nth-child(3) span").textContent = "";
       document.querySelector("#e td:nth-child(3) span").textContent = "";
-      document
-        .querySelector("#ssr td:nth-child(3) span")
-        .appendChild(makeInputForm());
-      document
-        .querySelector("#sr td:nth-child(3) span")
-        .appendChild(makeInputForm());
-      document
-        .querySelector("#a td:nth-child(3) span")
-        .appendChild(makeInputForm());
-      document
-        .querySelector("#b td:nth-child(3) span")
-        .appendChild(makeInputForm());
-      document
-        .querySelector("#c td:nth-child(3) span")
-        .appendChild(makeInputForm());
-      document
-        .querySelector("#d td:nth-child(3) span")
-        .appendChild(makeInputForm());
-      document
-        .querySelector("#e td:nth-child(3) span")
-        .appendChild(makeInputForm());
-      document
-        .querySelectorAll(".percent")
-        .forEach((node) => (node.textContent = "%"));
+      document.querySelector("#ssr td:nth-child(3) span").appendChild(makeInputForm());
+      document.querySelector("#sr td:nth-child(3) span").appendChild(makeInputForm());
+      document.querySelector("#a td:nth-child(3) span").appendChild(makeInputForm());
+      document.querySelector("#b td:nth-child(3) span").appendChild(makeInputForm());
+      document.querySelector("#c td:nth-child(3) span").appendChild(makeInputForm());
+      document.querySelector("#d td:nth-child(3) span").appendChild(makeInputForm());
+      document.querySelector("#e td:nth-child(3) span").appendChild(makeInputForm());
+      document.querySelectorAll(".percent").forEach((node) => (node.textContent = "%"));
+      showKinds(mode);
     } else {
-      document
-        .querySelectorAll(".percent")
-        .forEach((node) => (node.textContent = ""));
+      document.querySelectorAll(".percent").forEach((node) => (node.textContent = ""));
       changeDistribution(mode);
+      showKinds(mode);
     }
 
     // 数値の更新
