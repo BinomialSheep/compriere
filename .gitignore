@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+.vite/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# env / editor
+.env
+.env.*
+.DS_Store
+*.local
+
+# C++ build artifacts
+集計C++/a.out
+
+# planning / scratch (un-ignore if you want it committed)
+DESIGN.md
