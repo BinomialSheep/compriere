@@ -1,0 +1,14 @@
+{
+  "id": "nakuru-kujimate",
+  "name": "藍月なくる in くじメイト",
+  "description": "提供割合は過去のウェブポンからの推測です。",
+  "tiers": [
+    { "label": "激レア賞", "rate": 0, "kinds": 1 },
+    { "label": "レア賞", "rate": 0, "kinds": 1 },
+    { "label": "A賞", "rate": 0.01, "kinds": 1 },
+    { "label": "B賞", "rate": 0.1, "kinds": 4 },
+    { "label": "C賞", "rate": 0.12, "kinds": 3 },
+    { "label": "D賞", "rate": 0.32, "kinds": 8 },
+    { "label": "E賞", "rate": 0.45, "kinds": 5 }
+  ]
+}
