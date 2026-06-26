@@ -76,7 +76,7 @@ describe("parseLottery: 異常系", () => {
     expect(parseLottery({ id: "x", name: "x", tiers: [{ label: "A", rate: 0.1, kinds: 1.5 }] }).ok).toBe(false);
   });
 
-  it("確率の合計が1を超えたら拒否する", () => {
+  it("確率の合計が1を大きく超えたら拒否する", () => {
     const r = parseLottery({
       id: "x",
       name: "x",
@@ -87,6 +87,18 @@ describe("parseLottery: 異常系", () => {
     });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors.some((e) => e.includes("合計"))).toBe(true);
+  });
+
+  it("丸め誤差で合計が僅かに1を超える程度なら受理する（実測値・手入力対策）", () => {
+    const r = parseLottery({
+      id: "x",
+      name: "x",
+      tiers: [
+        { label: "A", rate: 0.5005, kinds: 1 },
+        { label: "B", rate: 0.5005, kinds: 1 },
+      ],
+    });
+    expect(r.ok).toBe(true); // 合計 1.001 は許容内
   });
 
   it("複数の不正を全件まとめて返す", () => {

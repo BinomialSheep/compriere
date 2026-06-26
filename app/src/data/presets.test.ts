@@ -12,14 +12,14 @@ describe("同梱プリセット", () => {
     }
   });
 
-  it("初期表示は藍月なくる", () => {
-    expect(defaultPreset.id).toBe("nakuru-kujimate");
+  it("初期表示は実測", () => {
+    expect(defaultPreset.id).toBe("measured");
   });
 
-  it("各プリセットの確率合計は1（ウェブポンは毎回必ず何か出る）", () => {
+  it("各プリセットの確率合計はほぼ1（ウェブポンは毎回必ず何か出る／実測は丸め誤差あり）", () => {
     for (const p of presets) {
       const sum = p.tiers.reduce((a, t) => a + t.rate, 0);
-      expect(sum).toBeCloseTo(1, 9);
+      expect(sum).toBeCloseTo(1, 2);
     }
   });
 });

@@ -29,8 +29,13 @@ export type ParseResult<T> =
   | { ok: true; value: T }
   | { ok: false; errors: string[] };
 
-/** 賞の確率の合計がこの値を超えたら不正（1回の抽選で出る賞は排他なので合計は1以下） */
-const RATE_SUM_EPSILON = 1e-9;
+/**
+ * 賞の確率の合計が「1 + この値」を超えたら不正とみなす。
+ * 1回の抽選で出る賞は排他なので合計は本来1以下だが、実測値や手入力は
+ * パーセントを丸めるためぴったり1にならない。旧サイトが手動モードで
+ * 99〜101% を許容していたのと同じく、約1%の許容を持たせる。
+ */
+export const RATE_SUM_TOLERANCE = 0.01;
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
@@ -95,8 +100,8 @@ export function parseLottery(input: unknown): ParseResult<Lottery> {
       .filter((r): r is number => typeof r === "number" && !Number.isNaN(r));
     if (rates.length === input.tiers.length) {
       const sum = rates.reduce((a, b) => a + b, 0);
-      if (sum > 1 + RATE_SUM_EPSILON) {
-        errors.push(`賞の確率の合計が1を超えています（現在 ${sum}）`);
+      if (sum > 1 + RATE_SUM_TOLERANCE) {
+        errors.push(`賞の確率の合計が1を大きく超えています（現在 ${sum}）`);
       }
     }
   }

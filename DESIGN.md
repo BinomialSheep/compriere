@@ -112,6 +112,13 @@ src/
 - **要・手動操作（go-live ゲート）**: GitHub の Settings → Pages → Source を「Deploy from a branch」から **「GitHub Actions」** に切り替える。切り替えると配信元が旧ルート（index.html）から新アプリ（app/dist）に変わる。旧ファイルはリポジトリに残るが配信されなくなる。戻す時は Source をブランチに戻せばよい。
 - 将来: go-live 後に旧 index.html / js / style.css を整理。さらに将来は app/ をルートへ昇格する選択肢もある。
 
+### 2026-06-21: 実測プリセット追加・デフォルト化
+- `src/data/presets/measured.json`: 旧 `calcStat()` の実測値（N=2653）を再現。kinds は旧 static と同じ既定値（SSR1 SR1 A2 B3 C5 D8 E10）。
+- `src/data/index.ts`: `[measured, nakuru, asamiyui]` の順にし、`defaultPreset` を実測に。
+- **バリデーション緩和**: 実測値・手入力はパーセント丸めで合計がぴったり1にならないため、合計上限の許容を 1e-9 → **約1%（`RATE_SUM_TOLERANCE = 0.01`）** に。旧サイトの手動モード「99〜101%」と整合。`lottery.ts` で定数を export し、`App.tsx` の警告しきい値と共有。
+- テスト更新: デフォルトID=measured、合計はほぼ1（丸め誤差許容）、丸め誤差の受理/明らかな超過の拒否を追加。全563通過。
+- 注意: 実測値を更新する時は `measured.json` を編集（旧コードの「ここを手動で更新する」に相当）。
+
 ### Step 3 スキップの判断（2026-06-21）
 URL共有は利用見込みが低いとのことで当面見送り。必要になれば urlCodec / storage を後付けする（UI状態は App に集約済みなので接続は容易）。
 

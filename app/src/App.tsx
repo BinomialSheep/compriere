@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import "./App.css";
 import type { Lottery, Tier } from "./core/lottery";
+import { RATE_SUM_TOLERANCE } from "./core/lottery";
 import { presets, defaultPreset } from "./data";
 import { LotteryTable } from "./ui/LotteryTable";
 
@@ -109,9 +110,9 @@ function App() {
       {draws === null && (
         <p className="warning">引く回数は0以上の整数で入力してください。</p>
       )}
-      {rateSum > 1 + 1e-9 && (
+      {rateSum > 1 + RATE_SUM_TOLERANCE && (
         <p className="warning">
-          提供割合の合計が100%を超えています（現在 {formatSum(rateSum)}）。1回の抽選で出る賞は1つなので、合計は100%以下にしてください。
+          提供割合の合計が100%を大きく超えています（現在 {formatSum(rateSum)}）。1回の抽選で出る賞は1つなので、合計は100%以下にしてください。
         </p>
       )}
 
