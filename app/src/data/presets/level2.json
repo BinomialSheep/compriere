@@ -1,7 +1,7 @@
 {
   "id": "level2",
   "name": "やや少なめ",
-  "description": "全体で1000個くらい引かれる場合",
+  "description": "全体で1,000個くらい引かれる場合",
   "tiers": [
     { "label": "激レア賞", "rate": 0.005, "kinds": 1 },
     { "label": "レア賞", "rate": 0.005, "kinds": 1 },
