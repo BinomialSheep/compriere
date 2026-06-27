@@ -1,6 +1,6 @@
 name: Deploy to GitHub Pages
 
-# main への push（または手動実行）で app/ をビルドして GitHub Pages へ配信する。
+# main への push（または手動実行）でビルドして GitHub Pages へ配信する。
 on:
   push:
     branches: [main]
@@ -20,9 +20,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
       - uses: actions/checkout@v4
 
@@ -30,7 +27,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: app/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -44,8 +40,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # path はワークスペース基準（working-directory の影響を受けない）
-          path: app/dist
+          path: dist
 
   deploy:
     needs: build
