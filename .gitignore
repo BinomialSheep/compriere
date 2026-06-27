@@ -18,6 +18,3 @@ yarn-error.log*
 .DS_Store
 *.local
 
-# C++ build artifacts
-集計C++/a.out
-
