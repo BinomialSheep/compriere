@@ -12,11 +12,11 @@ describe("同梱プリセット", () => {
     }
   });
 
-  it("初期表示は実測", () => {
-    expect(defaultPreset.id).toBe("measured");
+  it("初期表示は「普通」(level3)", () => {
+    expect(defaultPreset.id).toBe("level3");
   });
 
-  it("各プリセットの確率合計はほぼ1（ウェブポンは毎回必ず何か出る／実測は丸め誤差あり）", () => {
+  it("各プリセットの確率合計はほぼ1（ウェブポンは毎回必ず何か出る）", () => {
     for (const p of presets) {
       const sum = p.tiers.reduce((a, t) => a + t.rate, 0);
       expect(sum).toBeCloseTo(1, 2);

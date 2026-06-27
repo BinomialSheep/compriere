@@ -1,0 +1,14 @@
+{
+  "id": "level5",
+  "name": "超人気",
+  "description": "上位3%くらい人気の場合。全体で10,000個以上引かれる",
+  "tiers": [
+    { "label": "激レア賞", "rate": 0.0004, "kinds": 1 },
+    { "label": "レア賞", "rate": 0.0004, "kinds": 1 },
+    { "label": "A賞", "rate": 0.0035, "kinds": 2 },
+    { "label": "B賞", "rate": 0.03, "kinds": 3 },
+    { "label": "C賞", "rate": 0.18, "kinds": 5 },
+    { "label": "D賞", "rate": 0.19, "kinds": 8 },
+    { "label": "E賞", "rate": 0.5957, "kinds": 10 }
+  ]
+}

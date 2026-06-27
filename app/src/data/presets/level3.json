@@ -1,0 +1,14 @@
+{
+  "id": "level3",
+  "name": "普通",
+  "description": "大抵これくらいです。全体で2000個くらい引かれる場合",
+  "tiers": [
+    { "label": "激レア賞", "rate": 0.0025, "kinds": 1 },
+    { "label": "レア賞", "rate": 0.0025, "kinds": 1 },
+    { "label": "A賞", "rate": 0.02, "kinds": 2 },
+    { "label": "B賞", "rate": 0.05, "kinds": 3 },
+    { "label": "C賞", "rate": 0.175, "kinds": 5 },
+    { "label": "D賞", "rate": 0.2, "kinds": 8 },
+    { "label": "E賞", "rate": 0.55, "kinds": 10 }
+  ]
+}

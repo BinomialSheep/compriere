@@ -1,0 +1,14 @@
+{
+  "id": "level1",
+  "name": "少なめ",
+  "description": "全体で500個くらい引かれる場合",
+  "tiers": [
+    { "label": "激レア賞", "rate": 0.01, "kinds": 1 },
+    { "label": "レア賞", "rate": 0.01, "kinds": 1 },
+    { "label": "A賞", "rate": 0.08, "kinds": 2 },
+    { "label": "B賞", "rate": 0.03, "kinds": 3 },
+    { "label": "C賞", "rate": 0.17, "kinds": 5 },
+    { "label": "D賞", "rate": 0.17, "kinds": 8 },
+    { "label": "E賞", "rate": 0.53, "kinds": 10 }
+  ]
+}
